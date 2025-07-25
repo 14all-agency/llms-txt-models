@@ -16,34 +16,46 @@ export const ShopifyStatusResult = z.union([
   z.literal("ERROR"),
 ]).optional().nullable();
 
-export const ScanStatusResult = z.union([
-  z.literal("SUCCESS"),
-  z.literal("WARNING"),
-  z.literal("ERROR"),
-]).optional().nullable();
-
-export const ScanResult = z.object({
-  details: z.string().nullable().optional().describe("Describes issues or warnings etc from scan results"),
-  updatedAt: z.date().nullable().optional(),
-  status: ScanStatusResult,
-}).optional().nullable().describe("A scanned resource e.g. social media or reviews, null infers not scanned");
-
-export type Scan = z.infer<typeof ScanResult>;
-
 export const LlmsSettingsResult = z.object({
-  url: z.string().nullable().optional(),
+  // Detail overrides
+  storeName: z.string().nullable().optional().describe("User can override default"),
+  storeDescription: z.string().nullable().optional().describe("User can override default"),
+  storeEmail: z.string().nullable().optional().describe("User can override default"),
+  storePhone: z.string().nullable().optional().describe("User can override default"),
+  storeAddress: z.string().nullable().optional().describe("User can override default"),
+  // Custom stuff
+  customIntro: z.string().nullable().optional().describe("Intro"),
+  customFooter: z.string().nullable().optional().describe("Footer"),
+  customSections: z.string().nullable().optional().describe("multiline sections at bottom"),
+  urlExclusions: z.string().nullable().optional().describe("multiline or comma-seperated list of urls to exclude e.g. products"),
+  // Page inclusions
+  includeBlogs: z.boolean().nullable().optional().describe("Whether to include blogs and articles"),
+  includePages: z.boolean().nullable().optional().describe("Whether to include pages"),
+  includeProducts: z.boolean().nullable().optional().describe("Whether to include products"),
+  includeCollections: z.boolean().nullable().optional().describe("Whether to include collections"),
+  // Policy Toggles
+  includePrivacyPolicy: z.boolean().nullable().optional().describe("Whether to include privacy policy"),
+  includeRefundPolicy: z.boolean().nullable().optional().describe("Whether to include refund policy"),
+  includeShippingPolicy: z.boolean().nullable().optional().describe("Whether to include shipping policy"),
+  includeTermsPolicy: z.boolean().nullable().optional().describe("Whether to include terms of service policy"),
+  includeContactPolicy: z.boolean().nullable().optional().describe("Whether to include contact details policy link"),
+  // Toggles
+  includeContactDetails: z.boolean().nullable().optional().describe("Whether to include phone, email, etc"),
+  includeStoreDetails: z.boolean().nullable().optional().describe("Whether to show store timezone, currency, and created date"),
+  includeGenerationTimestamp: z.boolean().nullable().optional().describe("Whether to show when was last generated/updated"),
+  includePageTimestamp: z.boolean().nullable().optional().describe("Whether to show when a page was last updated"),
+  includeProductPricing: z.boolean().nullable().optional().describe("Whether to show product pricing"),
+  includeCollectionExtra: z.boolean().nullable().optional().describe("Whether to show collection total products"),
+  includeProductExtra: z.boolean().nullable().optional().describe("Whether to show product page vendor, type, availability, tags, variants, images"),
+  includeSEO: z.boolean().nullable().optional().describe("Whether to show seo titles and descriptions"),
+  excludeOutofStockProducts: z.boolean().nullable().optional().describe("Whether to exclude out of stock products from file"),
+  marketsEnabled: z.boolean().nullable().optional().describe("Whether to have market specific LLMS.txt files"),
+  githubEnabled: z.boolean().nullable().optional().describe("Whether to sync to github"),
+  // Other
   updatedAt: z.date().nullable().optional(),
-  prompt: z.string().nullable().optional().describe("User can add extra text"),
-  productsEnabled: z.boolean().nullable().optional(),
-  collectionsEnabled: z.boolean().nullable().optional(),
-  articlesEnabled: z.boolean().nullable().optional(),
-  pagesEnabled: z.boolean().nullable().optional(),
-}).optional().nullable().describe("Null infers not enabled");
+}).optional().nullable().describe("Null infers not onboarded/saved");
 
-export const GithubSettingsResult = z.object({
-  url: z.string().nullable().optional(),
-  updatedAt: z.date().nullable().optional(),
-}).optional().nullable().describe("Null infers not enabled");
+export type LlmsSettings = z.infer<typeof LlmsSettingsResult>;
 
 export const OrganisationResult = z.object({
   _id: z.instanceof(ObjectId),
@@ -59,14 +71,8 @@ export const OrganisationResult = z.object({
   shopifyConnection: ShopifyConnectionResult,
   shopifyConnectionStatus: ShopifyStatusResult,
   name: z.string().optional().nullable().describe("Org/brand name"),
-  socialMediaScan: ScanResult,
-  homepageSchemaScan: ScanResult,
-  reviewSitesScan: ScanResult,
+  // Custom
   llmsSettings: LlmsSettingsResult,
-  githubSettings: GithubSettingsResult,
-  onboarded: z.boolean().optional().nullable().describe("Whether org has completed onboarding"),
-  queriesAddedThisMonth: z.number().optional().nullable().describe("We track total queries added to prevent abuse"),
-  topics: z.array(z.string()).optional().nullable().describe("Suggested topics"),
   // Billing stuff
   billingPlanStatus: z.union([
     z.literal("INACTIVE"),
@@ -91,17 +97,12 @@ export const OrganisationModelSchema = z.object({
   shopifyConnection: OrganisationResult.shape.shopifyConnection,
   shopifyConnectionStatus: OrganisationResult.shape.shopifyConnectionStatus,
   name: OrganisationResult.shape.name,
-  socialMediaScan: OrganisationResult.shape.socialMediaScan,
-  homepageSchemaScan: OrganisationResult.shape.homepageSchemaScan,
-  reviewSitesScan: OrganisationResult.shape.reviewSitesScan,
-  llmsSettings: OrganisationResult.shape.llmsSettings,
-  githubSettings: OrganisationResult.shape.githubSettings,
-  onboarded: OrganisationResult.shape.onboarded,
-  queriesAddedThisMonth: OrganisationResult.shape.queriesAddedThisMonth,
-  topics: OrganisationResult.shape.topics,
   createdAt: OrganisationResult.shape.createdAt,
   settingsLastSynced: OrganisationResult.shape.settingsLastSynced,
   shopifySite: z.string().nullable().optional(),
+  // custom
+  llmsSettings: OrganisationResult.shape.llmsSettings,
+  // billing
   billingPlanStatus: OrganisationResult.shape.billingPlanStatus,
   billingSubscriptionId: OrganisationResult.shape.billingSubscriptionId,
   billingPlanHandle: OrganisationResult.shape.billingPlanHandle,
@@ -126,19 +127,14 @@ export const OrganisationModel = {
       plan: entity.plan || null,
       website: entity.website || null,
       name: entity.name || null,
-      socialMediaScan: entity.socialMediaScan || null,
-      homepageSchemaScan: entity.homepageSchemaScan || null,
-      reviewSitesScan: entity.reviewSitesScan || null,
-      llmsSettings: entity.llmsSettings || null,
-      githubSettings: entity.githubSettings || null,
-      onboarded: entity.onboarded || false,
-      queriesAddedThisMonth: entity.queriesAddedThisMonth || 0,
-      topics: entity.topics || [],
       createdAt: new Date(entity.createdAt || new Date()),
       settingsLastSynced: entity.settingsLastSynced ? new Date(entity.settingsLastSynced || new Date()) : null,
       shopifyConnection: includeCredentials ? (entity.shopifyConnection || null) : null,
       shopifyConnectionStatus: entity.shopifyConnectionStatus || "INACTIVE",
       shopifySite: entity?.shopifyConnection?.domain || null,
+      // custom
+      llmsSettings: entity.llmsSettings || null,
+      // billing
       billingPlanStatus: entity.billingPlanStatus || "INACTIVE",
       billingSubscriptionId: entity.billingSubscriptionId || null,
       billingPlanHandle: entity.billingPlanHandle || null,
