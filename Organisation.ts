@@ -27,7 +27,6 @@ export const LlmsSettingsResult = z.object({
   customIntro: z.string().nullable().optional().describe("Intro"),
   customFooter: z.string().nullable().optional().describe("Footer"),
   customSections: z.string().nullable().optional().describe("multiline sections at bottom"),
-  urlExclusions: z.string().nullable().optional().describe("multiline or comma-seperated list of urls to exclude e.g. products"),
   // Page inclusions
   includeBlogs: z.boolean().nullable().optional().describe("Whether to include blogs and articles"),
   includePages: z.boolean().nullable().optional().describe("Whether to include pages"),
@@ -45,14 +44,15 @@ export const LlmsSettingsResult = z.object({
   includeGenerationTimestamp: z.boolean().nullable().optional().describe("Whether to show when was last generated/updated"),
   includePageTimestamp: z.boolean().nullable().optional().describe("Whether to show when a page was last updated"),
   includeProductPricing: z.boolean().nullable().optional().describe("Whether to show product pricing"),
-  includeCollectionExtra: z.boolean().nullable().optional().describe("Whether to show collection total products"),
-  includeProductExtra: z.boolean().nullable().optional().describe("Whether to show product page vendor, type, availability, tags, variants, images"),
+  includeCollectionMetadata: z.boolean().nullable().optional().describe("Whether to show collection total products"),
+  includeProductMetadata: z.boolean().nullable().optional().describe("Whether to show product page vendor, type, availability, tags, variants, images"),
+  includeBlogMetadata: z.boolean().nullable().optional().describe("Whether to show blog tags, author, total blog posts"),
+  excludeOutOfStockProducts: z.boolean().nullable().optional().describe("Whether to exclude out of stock products from file"),
+  // Advanced Settings
   includeSEO: z.boolean().nullable().optional().describe("Whether to show seo titles and descriptions"),
-  excludeOutofStockProducts: z.boolean().nullable().optional().describe("Whether to exclude out of stock products from file"),
+  urlExclusions: z.string().nullable().optional().describe("multiline or comma-seperated list of urls to exclude e.g. products"),
   marketsEnabled: z.boolean().nullable().optional().describe("Whether to have market specific LLMS.txt files"),
   githubEnabled: z.boolean().nullable().optional().describe("Whether to sync to github"),
-  // Other
-  updatedAt: z.date().nullable().optional(),
 }).optional().nullable().describe("Null infers not onboarded/saved");
 
 export type LlmsSettings = z.infer<typeof LlmsSettingsResult>;
