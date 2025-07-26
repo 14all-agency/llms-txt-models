@@ -48,10 +48,12 @@ export const LlmsSettingsResult = z.object({
   excludeOutOfStockProducts: z.boolean().nullable().optional().describe("Whether to exclude out of stock products from file"),
   // Advanced Settings
   includeGenerationTimestamp: z.boolean().nullable().optional().describe("Whether to show when was last generated/updated"),
+  includeSitemap: z.boolean().nullable().optional().describe("Whether to link sitemap"),
+  includeRobotsTxt: z.boolean().nullable().optional().describe("Whether to link robots.txt"),
   includePageTimestamp: z.boolean().nullable().optional().describe("Whether to show when a page was last updated"),
   includeSEO: z.boolean().nullable().optional().describe("Whether to show seo titles and descriptions"),
   urlExclusions: z.string().nullable().optional().describe("multiline or comma-seperated list of urls to exclude e.g. products"),
-  marketsEnabled: z.boolean().nullable().optional().describe("Whether to have market specific LLMS.txt files"),
+  marketsEnabled: z.boolean().nullable().optional().describe("Whether to have market specific LLMS.txt files"), // Hiding RN
   githubEnabled: z.boolean().nullable().optional().describe("Whether to sync to github"),
 }).optional().nullable().describe("Null infers not onboarded/saved");
 
