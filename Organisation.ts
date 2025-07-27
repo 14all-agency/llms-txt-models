@@ -74,6 +74,7 @@ export const OrganisationResult = z.object({
   shopifyConnection: ShopifyConnectionResult,
   shopifyConnectionStatus: ShopifyStatusResult,
   name: z.string().optional().nullable().describe("Org/brand name"),
+  currency: z.string().optional().nullable().describe("shop base currency code"),
   // Custom
   llmsSettings: LlmsSettingsResult,
   // Billing stuff
@@ -101,6 +102,7 @@ export const OrganisationModelSchema = z.object({
   shopifyConnection: OrganisationResult.shape.shopifyConnection,
   shopifyConnectionStatus: OrganisationResult.shape.shopifyConnectionStatus,
   name: OrganisationResult.shape.name,
+  currency: OrganisationResult.shape.currency,
   createdAt: OrganisationResult.shape.createdAt,
   settingsLastSynced: OrganisationResult.shape.settingsLastSynced,
   shopifySite: z.string().nullable().optional(),
@@ -132,6 +134,7 @@ export const OrganisationModel = {
       plan: entity.plan || null,
       website: entity.website || null,
       name: entity.name || null,
+      currency: entity.currency || null,
       createdAt: new Date(entity.createdAt || new Date()),
       settingsLastSynced: entity.settingsLastSynced ? new Date(entity.settingsLastSynced || new Date()) : null,
       shopifyConnection: includeCredentials ? (entity.shopifyConnection || null) : null,
