@@ -40,7 +40,7 @@ export const LlmsSettingsResult = z.object({
   includeContactPolicy: z.boolean().nullable().optional().describe("Whether to include contact details policy link"),
   // Toggles
   includeContactDetails: z.boolean().nullable().optional().describe("Whether to include phone, email, etc"),
-  includeStoreDetails: z.boolean().nullable().optional().describe("Whether to show store timezone, currency, and created date"),
+  includeStoreDetails: z.boolean().nullable().optional().describe("Whether to show store timezone, currency, locale, and created date"),
   includeProductPricing: z.boolean().nullable().optional().describe("Whether to show product pricing"),
   includeCollectionMetadata: z.boolean().nullable().optional().describe("Whether to show collection total products"),
   includeProductMetadata: z.boolean().nullable().optional().describe("Whether to show product page vendor, type, availability, tags, variants, images"),
@@ -75,6 +75,8 @@ export const OrganisationResult = z.object({
   shopifyConnectionStatus: ShopifyStatusResult,
   name: z.string().optional().nullable().describe("Org/brand name"),
   currency: z.string().optional().nullable().describe("shop base currency code"),
+  timezone: z.string().optional().nullable().describe("shop timezone"),
+  shopCreatedAt: z.string().optional().nullable().describe("shop created at"),
   // Custom
   llmsSettings: LlmsSettingsResult,
   // Billing stuff
@@ -102,6 +104,8 @@ export const OrganisationModelSchema = z.object({
   shopifyConnection: OrganisationResult.shape.shopifyConnection,
   shopifyConnectionStatus: OrganisationResult.shape.shopifyConnectionStatus,
   name: OrganisationResult.shape.name,
+  shopCreatedAt: OrganisationResult.shape.shopCreatedAt,
+  timezone: OrganisationResult.shape.timezone,
   currency: OrganisationResult.shape.currency,
   createdAt: OrganisationResult.shape.createdAt,
   settingsLastSynced: OrganisationResult.shape.settingsLastSynced,
@@ -134,6 +138,8 @@ export const OrganisationModel = {
       plan: entity.plan || null,
       website: entity.website || null,
       name: entity.name || null,
+      timezone: entity.timezone || null,
+      shopCreatedAt: entity.shopCreatedAt || null,
       currency: entity.currency || null,
       createdAt: new Date(entity.createdAt || new Date()),
       settingsLastSynced: entity.settingsLastSynced ? new Date(entity.settingsLastSynced || new Date()) : null,
