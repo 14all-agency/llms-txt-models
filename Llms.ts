@@ -2,7 +2,7 @@ import { ObjectId } from 'bson';
 import { z } from "zod";
 import { OrganisationModel, OrganisationModelSchema, OrganisationResult } from './Organisation';
 
-export const QueryResult = z.object({
+export const LlmsResult = z.object({
   _id: z.instanceof(ObjectId),
   org: z.union([
     z.instanceof(ObjectId),
@@ -19,30 +19,30 @@ export const QueryResult = z.object({
   githubLink: z.string().nullable().optional().describe("The github link (if enabled)"),
 });
 
-export type QueryResultEntity = z.infer<typeof QueryResult>;
+export type LlmsResultEntity = z.infer<typeof LlmsResult>;
 
-export const QueryModelSchema = z.object({
+export const LlmsModelSchema = z.object({
   id: z.string(),
   org: z.union([
     z.string(),
     OrganisationModelSchema,
   ]),
-  createdAt: QueryResult.shape.createdAt,
-  updatedAt: QueryResult.shape.updatedAt,
-  generationRequestedAt: QueryResult.shape.generationRequestedAt,
-  lastHit: QueryResult.shape.lastHit,
-  totalHits: QueryResult.shape.totalHits,
-  totalLinks: QueryResult.shape.totalLinks,
-  domain: QueryResult.shape.domain,
-  generatedFile: QueryResult.shape.generatedFile,
-  githubLink: QueryResult.shape.githubLink,
+  createdAt: LlmsResult.shape.createdAt,
+  updatedAt: LlmsResult.shape.updatedAt,
+  generationRequestedAt: LlmsResult.shape.generationRequestedAt,
+  lastHit: LlmsResult.shape.lastHit,
+  totalHits: LlmsResult.shape.totalHits,
+  totalLinks: LlmsResult.shape.totalLinks,
+  domain: LlmsResult.shape.domain,
+  generatedFile: LlmsResult.shape.generatedFile,
+  githubLink: LlmsResult.shape.githubLink,
 });
 
-export type QueryModel = z.infer<typeof QueryModelSchema>;
+export type LlmsModel = z.infer<typeof LlmsModelSchema>;
 
-export const QueryModel = {
-  convertFromEntity(entity: QueryResultEntity): QueryModel {
-    const obj: QueryModel = {
+export const LlmsModel = {
+  convertFromEntity(entity: LlmsResultEntity): LlmsModel {
+    const obj: LlmsModel = {
       id: entity._id.toHexString(),
       // @ts-ignore
       org: ObjectId.isValid(entity.org) ? entity.org.toHexString() : OrganisationModel.convertFromEntity(entity.org, includeCredentials),
@@ -56,6 +56,6 @@ export const QueryModel = {
       generatedFile: entity.generatedFile || "",
       githubLink: entity.githubLink || "",
     };
-    return QueryModelSchema.parse(obj);
+    return LlmsModelSchema.parse(obj);
   },
 };
