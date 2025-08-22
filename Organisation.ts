@@ -50,6 +50,8 @@ export const LlmsSettingsResult = z.object({
   indexChatGpt: z.boolean().nullable().optional().describe("Whether to submit our links to chatgpt"),
   indexGemini: z.boolean().nullable().optional().describe("Whether to submit our links to gemini"),
   indexPerplexity: z.boolean().nullable().optional().describe("Whether to submit our links to perplexity"),
+  indexGrok: z.boolean().nullable().optional().describe("Whether to submit our links to grok"),
+  indexCopilot: z.boolean().nullable().optional().describe("Whether to submit our links to copilot"),
   indexSearchEngines: z.boolean().nullable().optional().describe("Whether to submit our links to search engines"),
   // Advanced Settings
   includeGenerationTimestamp: z.boolean().nullable().optional().describe("Whether to show when was last generated/updated"),
