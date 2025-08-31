@@ -17,6 +17,11 @@ export const LlmsResult = z.object({
   totalLinks: z.number().nullable().optional().describe("Total amount of links in the file"),
   generatedFile: z.string().nullable().optional().describe("The generated file to return"),
   githubLink: z.string().nullable().optional().describe("The github link (if enabled)"),
+  // Market details
+  market: z.string().nullable().optional().describe("Market handle"),
+  marketCurrency: z.string().nullable().optional().describe("Market base currency"),
+  marketLocale: z.string().nullable().optional().describe("Market base locale"),
+  marketCountry: z.string().nullable().optional().describe("Market base country"),
 });
 
 export type LlmsResultEntity = z.infer<typeof LlmsResult>;
@@ -36,6 +41,11 @@ export const LlmsModelSchema = z.object({
   domain: LlmsResult.shape.domain,
   generatedFile: LlmsResult.shape.generatedFile,
   githubLink: LlmsResult.shape.githubLink,
+  // Market
+  market: LlmsResult.shape.market,
+  marketCurrency: LlmsResult.shape.marketCurrency,
+  marketLocale: LlmsResult.shape.marketLocale,
+  marketCountry: LlmsResult.shape.marketCountry,
 });
 
 export type LlmsModel = z.infer<typeof LlmsModelSchema>;
@@ -55,6 +65,10 @@ export const LlmsModel = {
       domain: entity.domain || "",
       generatedFile: entity.generatedFile || "",
       githubLink: entity.githubLink || "",
+      market: entity.market || "",
+      marketCurrency: entity.marketCurrency || "",
+      marketLocale: entity.marketLocale || "",
+      marketCountry: entity.marketCountry || "",
     };
     return LlmsModelSchema.parse(obj);
   },
