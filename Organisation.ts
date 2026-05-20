@@ -27,11 +27,13 @@ export const LlmsSettingsResult = z.object({
   customIntro: z.string().nullable().optional().describe("Intro"),
   customFooter: z.string().nullable().optional().describe("Footer"),
   customSections: z.string().nullable().optional().describe("multiline sections at bottom"),
+  overrideAgentInstructions: z.string().nullable().optional().describe("Custom agent instructions markdown"),
   // Page inclusions
   includeBlogs: z.boolean().nullable().optional().describe("Whether to include blogs and articles"),
   includePages: z.boolean().nullable().optional().describe("Whether to include pages"),
   includeProducts: z.boolean().nullable().optional().describe("Whether to include products"),
   includeCollections: z.boolean().nullable().optional().describe("Whether to include collections"),
+  includeAgentInstructions: z.boolean().nullable().optional().describe("Whether to include agent instructions"),
   // Policy Toggles
   includePrivacyPolicy: z.boolean().nullable().optional().describe("Whether to include privacy policy"),
   includeRefundPolicy: z.boolean().nullable().optional().describe("Whether to include refund policy"),
@@ -60,6 +62,7 @@ export const LlmsSettingsResult = z.object({
   includePageTimestamp: z.boolean().nullable().optional().describe("Whether to show when a page was last updated"),
   includeSEO: z.boolean().nullable().optional().describe("Whether to show seo titles and descriptions"),
   urlExclusions: z.string().nullable().optional().describe("multiline or comma-seperated list of urls to exclude e.g. products"),
+  placeAgentInstructionsAtTop: z.boolean().nullable().optional().describe("Whether to place agent instructions at the top of the file"),
   marketsEnabled: z.boolean().nullable().optional().describe("Whether to have market specific LLMS.txt files"),
   githubEnabled: z.boolean().nullable().optional().describe("Whether to sync to github"),
 }).optional().nullable().describe("Null infers not onboarded/saved");
@@ -95,6 +98,7 @@ export const OrganisationResult = z.object({
   billingSubscriptionId: z.string().optional().nullable(),
   billingPlanHandle: z.string().optional().nullable(),
   billingUpdatedAt: z.date().nullable().optional(),
+  llmsThemeScopesMissingEmailSentAt: z.date().nullable().optional(),
 });
 
 export type OrganisationResultEntity = z.infer<typeof OrganisationResult>;
@@ -126,6 +130,7 @@ export const OrganisationModelSchema = z.object({
   billingSubscriptionId: OrganisationResult.shape.billingSubscriptionId,
   billingPlanHandle: OrganisationResult.shape.billingPlanHandle,
   billingUpdatedAt: OrganisationResult.shape.billingUpdatedAt,
+  llmsThemeScopesMissingEmailSentAt: OrganisationResult.shape.llmsThemeScopesMissingEmailSentAt,
 });
 
 export type OrganisationModel = z.infer<typeof OrganisationModelSchema>;
@@ -163,6 +168,7 @@ export const OrganisationModel = {
       billingSubscriptionId: entity.billingSubscriptionId || null,
       billingPlanHandle: entity.billingPlanHandle || null,
       billingUpdatedAt: entity.billingUpdatedAt ? new Date(entity.billingUpdatedAt || new Date()) : null,
+      llmsThemeScopesMissingEmailSentAt: entity.llmsThemeScopesMissingEmailSentAt ? new Date(entity.llmsThemeScopesMissingEmailSentAt || new Date()) : null,
     };
     return OrganisationModelSchema.parse(obj);
   },
