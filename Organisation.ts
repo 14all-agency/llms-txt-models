@@ -34,6 +34,7 @@ export const LlmsSettingsResult = z.object({
   includeProducts: z.boolean().nullable().optional().describe("Whether to include products"),
   includeCollections: z.boolean().nullable().optional().describe("Whether to include collections"),
   includeAgentInstructions: z.boolean().nullable().optional().describe("Whether to include agent instructions"),
+  createAgentsMd: z.boolean().nullable().optional().describe("Whether to create or update agents.md alongside llms.txt"),
   // Policy Toggles
   includePrivacyPolicy: z.boolean().nullable().optional().describe("Whether to include privacy policy"),
   includeRefundPolicy: z.boolean().nullable().optional().describe("Whether to include refund policy"),
