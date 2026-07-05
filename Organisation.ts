@@ -65,6 +65,7 @@ export const LlmsSettingsResult = z.object({
   urlExclusions: z.string().nullable().optional().describe("multiline or comma-seperated list of urls to exclude e.g. products"),
   placeAgentInstructionsAtTop: z.boolean().nullable().optional().describe("Whether to place agent instructions at the top of the file"),
   marketsEnabled: z.boolean().nullable().optional().describe("Whether to have market specific LLMS.txt files"),
+  multiLocaleMarketsEnabled: z.boolean().nullable().optional().describe("Whether to generate one LLMS.txt file per market locale instead of only the primary market language"),
   githubEnabled: z.boolean().nullable().optional().describe("Whether to sync to github"),
 }).optional().nullable().describe("Null infers not onboarded/saved");
 

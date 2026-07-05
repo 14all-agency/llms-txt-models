@@ -22,6 +22,7 @@ export const LlmsResult = z.object({
   themeAssetUpdatedAt: z.date().nullable().optional().describe("When the theme asset was last updated"),
   themeId: z.string().nullable().optional().describe("Shopify theme ID containing the main LLMS file"),
   // Market details
+  marketId: z.string().nullable().optional().describe("Market ID"),
   market: z.string().nullable().optional().describe("Market handle"),
   marketCurrency: z.string().nullable().optional().describe("Market base currency"),
   marketLocale: z.string().nullable().optional().describe("Market base locale"),
@@ -50,6 +51,7 @@ export const LlmsModelSchema = z.object({
   themeAssetUpdatedAt: LlmsResult.shape.themeAssetUpdatedAt,
   themeId: LlmsResult.shape.themeId,
   // Market
+  marketId: LlmsResult.shape.marketId,
   market: LlmsResult.shape.market,
   marketCurrency: LlmsResult.shape.marketCurrency,
   marketLocale: LlmsResult.shape.marketLocale,
@@ -77,6 +79,7 @@ export const LlmsModel = {
       themeAssetKey: entity.themeAssetKey || "",
       themeAssetUpdatedAt: entity.themeAssetUpdatedAt ? new Date(entity.themeAssetUpdatedAt || new Date()) : null,
       themeId: entity.themeId || "",
+      marketId: entity.marketId || "",
       market: entity.market || "",
       marketCurrency: entity.marketCurrency || "",
       marketLocale: entity.marketLocale || "",
